@@ -51,10 +51,7 @@ app.post('/api/courses', (req, res) => {
 
 app.put('/api/courses/:id', (req, res) => {
     let course = courses.find(i => i.id === parseInt(req.params.id));
-    if (!course) {
-        res.status(404);
-        res.send(`the course with id ${req.params.id} not found.`)
-    }
+    if (!course) res.status(404).send(`the course with id ${req.params.id} not found.`);
 
     let { error } = validateCourse(req.body); //validResult.error
     if (error) return res.status(400).send(error.details[0].message);
@@ -62,6 +59,15 @@ app.put('/api/courses/:id', (req, res) => {
     course.name = req.body.name;
     res.send(course);
 
+});
+
+app.delete('/api/courses/:id', (req, res) => {
+    let course = courses.find(i => i.id === parseInt(req.params.id));
+    if (!course) res.status(404).send(`the course with id ${req.params.id} not found.`);
+
+    let index = courses.indexOf(course);
+    courses.splice(index,1);
+    res.send(course);
 });
 
 app.get('/api/posts/:year/:month', (req, res) => {
