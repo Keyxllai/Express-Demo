@@ -29,22 +29,15 @@ app.get('/api/courses', (req, res) => {
 });
 
 app.get('/api/courses/:id', (req, res) => {
-
     let course = courses.find(i => i.id === parseInt(req.params.id));
-    if (!course) {
-        res.status(404);
-        res.send(`the course with id ${req.params.id} not found.`)
-    }
+    if (!course) res.status(404).send(`the course with id ${req.params.id} not found.`)
     res.send(course);
 });
 
 app.post('/api/courses', (req, res) => {
     // validation
     let { error } = validateCourse(req.body); //validResult.error
-    if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message);
 
     // Biz logic
     let course = {
@@ -64,10 +57,7 @@ app.put('/api/courses/:id', (req, res) => {
     }
 
     let { error } = validateCourse(req.body); //validResult.error
-    if (error) {
-        res.status(400).send(error.details[0].message);
-        return;
-    }
+    if (error) return res.status(400).send(error.details[0].message);
 
     course.name = req.body.name;
     res.send(course);
