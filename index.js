@@ -40,9 +40,9 @@ app.get('/api/courses/:id', (req, res) => {
 
 app.post('/api/courses', (req, res) => {
     // validation
-    let validResult = validateCourse(req.body);
-    if (validResult.error) {
-        res.status(400).send(validResult.error.details[0].message);
+    let { error } = validateCourse(req.body); //validResult.error
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
 
@@ -62,10 +62,10 @@ app.put('/api/courses/:id', (req, res) => {
         res.status(404);
         res.send(`the course with id ${req.params.id} not found.`)
     }
-    
-    let validResult = validateCourse(req.body);
-    if (validResult.error) {
-        res.status(400).send(validResult.error.details[0].message);
+
+    let { error } = validateCourse(req.body); //validResult.error
+    if (error) {
+        res.status(400).send(error.details[0].message);
         return;
     }
 
@@ -82,7 +82,7 @@ app.get('/api/emails/:year/:month', (req, res) => {
     res.send(req.query);
 });
 
-function validateCourse(course){
+function validateCourse(course) {
     var schema = {
         name: joi.string().min(3).required()
     };
