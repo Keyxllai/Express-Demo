@@ -1,4 +1,5 @@
 const express = require('express');
+const joi = require('joi');
 
 const app = new express();
 
@@ -30,8 +31,15 @@ app.get('/api/courses/:id',(req,res)=>{
 });
 
 app.post('/api/courses',(req,res)=>{
-    if(!req.body.name || req.body.name.length < 3){
-        res.status(400).send('Name is required and length must be more than 3')
+    var schema = {
+        name:joi.string().min(3).required()
+    };
+
+    let validResult = joi.validate(req.body, schema);
+
+
+    if(validResult.error){
+        res.status(400).send(validResult.error.details[0].message);
         return;
     }
 
