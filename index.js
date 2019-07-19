@@ -31,19 +31,17 @@ app.get('/api/courses/:id',(req,res)=>{
 });
 
 app.post('/api/courses',(req,res)=>{
+    // validation
     var schema = {
         name:joi.string().min(3).required()
     };
-
     let validResult = joi.validate(req.body, schema);
-
-
     if(validResult.error){
         res.status(400).send(validResult.error.details[0].message);
         return;
     }
 
-
+    // Biz logic
     let course = {
         id: courses.length +1,
         name: req.body.name
